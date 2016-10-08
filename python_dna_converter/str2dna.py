@@ -55,4 +55,4 @@ def ascii_to_dna(string):
     return dna
 
 
-print (ascii_to_dna("290816 (h4t+$1nG3=42 AbsG©2016"))
+print (ascii_to_dna("La phrase mystère :)"))
