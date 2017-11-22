@@ -1,4 +1,4 @@
-site_name: Regovar
+site_name: Test RTD ikit
 theme: readthedocs
 markdown_extensions:
  - extra
