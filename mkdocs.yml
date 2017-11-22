@@ -1,0 +1,18 @@
+site_name: Regovar
+theme: readthedocs
+markdown_extensions:
+ - extra
+ - nl2br
+ - sane_lists
+ - abbr
+ - attr_list
+ - def_list
+ - tables 
+pages:
+- Home: 'index.md'
+- 'Forlder 1':
+    - 'Doc 1': 'test/test1.md'
+    - 'My doc 2': 'test/test2.md'
+- 'Folder 2':
+    - 'doc 3': 'test/test3.md'
+    - 'Doc 4': 'test/test4.md'
