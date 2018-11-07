@@ -55,8 +55,8 @@ class RoundedRedButton extends Button
 {
     constructor(text, attributes)
     {
-        var params = (attributes) ? attributes : {};
-        params.style = "border: none; border-radius: 5px; background-color:red; color: white;"
-        super(text, params);
+        //var params = (attributes) ? attributes : {};
+        //params.style = "border: none; border-radius: 5px; background-color:red; color: white;"
+        super(text, {style: "border: none; border-radius: 5px; background-color:red; color: white;", ...attributes});
     }
 }
