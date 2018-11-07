@@ -15,7 +15,7 @@
 			<span>images/glenn.jpg</span>
 			<span>images/daryl.jpg</span>
 		</div>
-		<button id="nextButton" onclick="moveItem(); return false;">Image suivante !</button>
+		<button id="nextButton">Image suivante !</button>
 		<script>
 			var s = document.getElementById("slideShow");
 			function addLink(elmt)
@@ -35,6 +35,8 @@
 				var item = s.children[i];
 				item.outerHTML = addLink(item.innerHTML);
 			}
+
+			document.querySelector('#nextButton').addEventListener('click', moveItem);
 
 			var slideShowTimer = window.setInterval(moveItem, 2000);
 		</script>
