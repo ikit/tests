@@ -1,0 +1,5 @@
+{
+	"basePath": "",
+	"apiPath": "http://localhost/api",
+	"videoPath": "http://localhost/uploads"
+}
