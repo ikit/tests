@@ -1,3 +1,9 @@
-import helloWorld from './helloWorld';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import VideoDetail from './VideoDetail';
+import VideoList from './VideoList';
 
-helloWorld();
+ReactDOM.render(
+   <VideoList />,
+   document.querySelector( '#appContainer' ) 
+);
