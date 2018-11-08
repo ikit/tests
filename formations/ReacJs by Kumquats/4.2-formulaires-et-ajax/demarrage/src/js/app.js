@@ -2,10 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import VideoDetail from './VideoDetail';
 import VideoList from './VideoList';
-
+import VideoForm from './VideoForm';
 
 ReactDOM.render(
-	// <VideoDetail />
-	<VideoList />
-	, document.querySelector('#appContainer')
+   <VideoDetail />,
+   document.querySelector( '#appContainer' ) 
 );

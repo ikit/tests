@@ -1,32 +1,39 @@
 import React from 'react';
 import VideoItem from './VideoItem';
-import videos from './videos';
+import request from 'superagent';
+import config from 'config';
 
-export default class VideoList extends React.Component {
+class VideoList extends React.Component {
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            videos: []
+        }
+    }
 
-	constructor(){
-		super();
-		this.state = {
-			videos
-		}
-	}
+    render() {
+        return (
+            <div className="row marketing">
+                <div className="col-lg-12">
+                    <ul className="media-list">
+                        {this.state.videos.map( video => (
+                          <VideoItem key={video.id} video={video} />
+                        ) )}
+                    </ul>
+                </div>
+            </div>
+        );
+    }
 
-	render () {
-		return (
-			<div className="row marketing">
-				<div className="col-lg-12">
-					<ul className="media-list">
-						{ this.renderVideos() }
-					</ul>
-				</div>
-			</div>
-		);
-	}
-
-	renderVideos() {
-		return this.state.videos.map( video => (
-			<VideoItem key={video.id} video={video} />
-		) );
-	}
-
+    componentDidMount() {
+        request
+            .get( `${config.apiPath}/videos` )
+            .then( res => {
+                this.setState( {
+                    videos: res.body
+                } )
+            } )
+    }
 }
+
+export default VideoList;

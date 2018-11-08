@@ -1,74 +1,125 @@
 import React from 'react';
-import videos from './videos';
+import request from 'superagent';
+import config from 'config';
 
-export default class VideoDetail extends React.Component {
+class VideoDetail extends React.Component {
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            video: null,
+            comments: [],
+            id: 1,
+            newComment: '',
+            isLoading: false
+        }
+        this.handleSubmit = this.handleSubmit.bind( this );
+        this.handleCommentChange = this.handleCommentChange.bind( this );
+    }
 
-	constructor() {
-		super();
+    render() {
+        return (
+            <div className="row marketing">
+                <div className="col-sm-12 col-md-12">
+                    <div className="video-detail">
+                        {
+                            this.state.video &&
+                            <div className="caption">
+                                <video
+                                    style={{ width: '100%', backgroundColor: 'black'}}
+                                    ref={ el => this.videoElem = el }
+                                    height="300"
+                                    controls
+                                    muted
+                                    src={`${config.basePath}/uploads/${this.state.video.file}`}
+                                >
+                                </video>
+                                <h3>{this.state.video.title}</h3>
+                                {
+                                    this.state.video.description &&
+                                    <p>{this.state.video.description}</p>
+                                }
+                                <form onSubmit={this.handleSubmit}>
+                                    <div class="form-group">
+                                        <label for="content">Ajouter un commentaire</label>
+                                        <textarea
+                                            class="form-control"
+                                            name="content"
+                                            id="content"
+                                            cols="30"
+                                            rows="2"
+                                            disabled={this.state.isLoading}
+                                            value={this.state.newComment}
+                                            onChange={this.handleCommentChange}
+                                        />
+                                    </div>
+                                    <button type="submit" class="btn btn-default" disabled={this.state.isLoading}>
+                                        {this.state.isLoading ? 'Chargement...' : 'Envoyer' }
+                                    </button>
+                                </form>
+                                <div class="comments">
+                                    <h4>Commentaires: </h4>
+                                    {this.state.comments.map( comment => (
+                                        <div class="panel panel-default">
+                                            <div class="panel-body">
+                                                <h6><small>{(new Date(comment.created_at)).toLocaleString()}</small></h6>
+                                                {comment.content}
+                                                </div>
+                                        </div>                                        
+                                    ))}
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
 
-		const index = Math.floor(Math.random()*videos.length);
-		this.state = {
-			index,
-			video: videos[index]
-		};
+            </div>            
+        )
+    }
 
-		this.handleNextVideoClick = this.handleNextVideoClick.bind( this );
-	}
+    handleCommentChange( event ) {
+        this.setState({ newComment: event.target.value });
+    }
 
-	componentDidMount(){
-		this.playVideo();
-	}
+    handleSubmit( event ) {
+        event.preventDefault();
+        this.setState({ isLoading: true });
+        request
+            .post(`${config.apiPath}/videos/${this.state.id}/comments` )
+            .field( 'content', this.state.newComment )
+            .then( res => {
+                this.fetchComments();
+                this.setState( { newComment: '', isLoading: false });
+            } )
+    }
 
-	componentDidUpdate(prevProps, prevState){
-		if (prevState.video.id != this.state.video.id){
-			this.playVideo();
-		}
-	}
+    playVideo() {
+        if ( this.videoElem )
+        {
+            this.videoElem.play();
+        }
+    }
 
-	playVideo() {
-		if ( this.video ) {
-			this.video.play();
-		}
-	}
+    fetchComments() {
+        request
+            .get( `${config.apiPath}/videos/${this.state.id}/comments` )
+            .then( res => {
+                this.setState({ comments: res.body })
+            } )
+    }
 
-	render() {
-		return (
-			<div className="row marketing">
-				<div className="col-sm-12 col-md-12">
-					<div className="video-detail">
-						<div className="caption">
-							<video
-								style={{ width: '100%', backgroundColor: 'black' }}
-								ref={el => this.video = el}
-								height="300"
-								controls
-								src={
-									this.state.video &&
-									'./uploads/' + this.state.video.file
-								}
-							>
-							</video>
-							<h3>{this.state.video && this.state.video.title}</h3>
-							<p>{this.state.video && this.state.video.description}</p>
-							<footer className="text-right">
-								<button
-									className="btn btn-default"
-									onClick={this.handleNextVideoClick}
-								>next video</button>
-							</footer>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
+    componentDidMount() {
+        this.playVideo();
+        request
+            .get( `${config.apiPath}/videos/${this.state.id}` )
+            .then( res => {
+                this.setState({ video: res.body })
+            });
+        this.fetchComments();
+    }
 
-	handleNextVideoClick() {
-		const newIndex = (this.state.index+1) % videos.length;
-		this.setState({
-			index: newIndex,
-			video: videos[newIndex]
-		});
-	}
-
+    componentDidUpdate() {
+        this.playVideo();
+    }
 }
+
+export default VideoDetail;

@@ -1,28 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import config from 'config';
 
-const VideoItem = props => (
-	<li className="media">
-		<a href="#">
-			<div className="media-left">
-				<img className="media-object"
-					alt="cat" src={'./uploads/thumbnails/'+props.video.thumbnail}
-					width="246"
-					height="138" />
-			</div>
-			<div className="media-body">
-				<h4 className="media-heading">{props.video.title}</h4>
-				<p>{props.video.description}</p>
-			</div>
-		</a>
-	</li>
-);
-VideoItem.propTypes = {
-	video: PropTypes.shape({
-		id: PropTypes.number.isRequired,
-		title: PropTypes.string,
-		description: PropTypes.string,
-	}).isRequired
+export default function VideoItem( props ) {
+    return (
+        <li className="media">
+            <div className="media-left">
+                <img className="media-object"
+                    alt="cat" src={`${config.basePath}/uploads/thumbnails/${props.video.thumbnail}`}
+                    width="246"
+                    height="138" />
+            </div>
+            <div className="media-body">
+                <h4 className="media-heading">{props.video.title}</h4>
+                <p>{props.video.description}</p>
+            </div>
+        </li>        
+    )
 }
 
-export default VideoItem;
+VideoItem.propTypes = {
+    video: PropTypes.shape({
+        thumbnail: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        description: PropTypes.string.isRequired
+    }).isRequired
+}
