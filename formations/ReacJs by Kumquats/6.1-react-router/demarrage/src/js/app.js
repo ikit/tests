@@ -2,27 +2,25 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from "redux";
+import { createBrowserHistory } from "history";
+import { ConnectedRouter } from "connected-react-router";
 
-import VideoDetail from './containers/VideoDetail';
-import VideoList from './containers/VideoList';
-import VideoForm from './containers/VideoForm';
+import Layout from './containers/Layout';
 import reducer from "./reducers";
 import configureStore from './store/configureStore';
+import config from 'config'
 
-// On crée le store en lui fournissant le "reducer"
-// const store = createStore( reducer );
-//
-// Pour pouvoir utiliser les Redux Devtools la syntaxe,
-// plus complexe est externalisée dans un module configureStore
-const store = configureStore();
+const browserHistory = createBrowserHistory({
+  basename: config.basePath 
+});
+
+const store = configureStore( browserHistory );
 
 ReactDOM.render(
-	<Provider store={store}>
-		<VideoDetail />
-	</Provider>
-/*
-		<VideoList />
-		<VideoForm />
-*/
+    <Provider store={store}>
+		<ConnectedRouter history={browserHistory}>
+			<Layout />
+		</ConnectedRouter>
+    </Provider>
 	, document.querySelector('#appContainer')
 );

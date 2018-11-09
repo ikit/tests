@@ -8,9 +8,6 @@ module.exports = {
 		path: path.resolve(__dirname, '../site/web/js'),
 		filename: 'app.bundle.js'
 	},
-	externals: {
-        'config': 'config',
-    },
 	module: {
 		rules: [
 			{
@@ -25,5 +22,8 @@ module.exports = {
 			}
 		]
 	},
-	devtool: 'source-map'
+	devtool: 'source-map',
+	externals: {
+		config: 'config'
+	}
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchVideo, fetchComments, postComment, updateCommentInput } from '../actions';
+import config from 'config';
 
 function mapStateToProps( state )
 {
@@ -22,18 +23,18 @@ function mapDispatchToProps( dispatch )
 }
 
 
-class VideoDetail extends React.Component {
+ class VideoDetail extends React.Component {
 
 	constructor() {
 		super();
-		this.id = 2;
 		this.handleSubmit = this.handleSubmit.bind( this );
 		this.handleCommentInputChange = this.handleCommentInputChange.bind( this );
 	}
 
 	componentDidMount(){
-		this.props.fetchVideo(this.id);
-		this.props.fetchComments(this.id);
+		const routeParams = this.props.match.params;
+		this.props.fetchVideo( routeParams.id );
+		this.props.fetchComments( routeParams.id );
 	}
 
 	componentDidUpdate(prevProps, prevState){
@@ -61,7 +62,7 @@ class VideoDetail extends React.Component {
 								controls
 								src={
 									this.props.video &&
-									'./uploads/' + this.props.video.file
+									config.basePath + '/uploads/' + this.props.video.file
 								}
 							>
 							</video>
